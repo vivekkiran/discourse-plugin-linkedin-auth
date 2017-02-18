@@ -6,12 +6,11 @@
 
 require 'auth/oauth2_authenticator'
 
-gem 'omniauth-linkedin-oauth2', '0.1.5'
+gem 'omniauth-linkedin-oauth2', '0.1.6'
 
 enabled_site_setting :linkedin_enabled
 
 class LinkedInAuthenticator < ::Auth::OAuth2Authenticator
-  PLUGIN_NAME = 'oauth-linkedin'
 
   def name
     'linkedin'
@@ -34,16 +33,17 @@ class LinkedInAuthenticator < ::Auth::OAuth2Authenticator
 
   def register_middleware(omniauth)
     omniauth.provider :linkedin,
-                      setup: lambda { |env|
+                      :setup => lambda { |env|
                         strategy = env['omniauth.strategy']
                         strategy.options[:client_id] = SiteSetting.linkedin_client_id
                         strategy.options[:client_secret] = SiteSetting.linkedin_secret
-                      }
+                      },
+                      :scope=> "r_basicprofile,r_emailaddress"
   end
 end
 
 auth_provider :title => 'with LinkedIn',
-              enabled_setting: "linkedin_enabled",
+              :enabled_setting => "linkedin_enabled",
               :message => 'Log in via LinkedIn',
               :frame_width => 920,
               :frame_height => 800,
