@@ -38,6 +38,7 @@ class LinkedInAuthenticator < ::Auth::OAuth2Authenticator
                         strategy.options[:client_id] = SiteSetting.linkedin_client_id
                         strategy.options[:client_secret] = SiteSetting.linkedin_secret
                       },
+                      :redirect_uri => "#{Discourse.base_url}/auth/linkedin/callback",
                       :scope=> "r_basicprofile,r_emailaddress"
   end
 end
